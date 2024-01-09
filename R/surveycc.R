@@ -8,7 +8,7 @@
 #'  and variables graphs (Gittins, 1986) can also be drawn by `surveycc` further
 #'  complementing the information listed by the existing `cancor`.
 #'
-#'  Moreover, `csdcanon` implements an algorithm (Cruz-Cano and Mead-Morse, 2023) that
+#'  Moreover, `csdcanon` implements an algorithm (Cruz-Cano, Cohen, and Mead-Morse, 2024) that
 #'  allows the inclusion of complex survey design elements, e.g. strata, cluster and
 #'  replicate weights, in the estimation of the statistical significance of the canonical
 #'  correlations. The core idea of the algorithm is to reduce the problem of finding
@@ -48,8 +48,8 @@
 #'  and see the documentation in [survey::svyglm] for the Weighted/Complex Survey Design
 #'  regression.
 #'
-#' @references  * Cruz-Cano and Mead-Morse. Canonical Correlation Analysis for
-#'  Complex Survey data: The svycanon command.  2023 The Stata Journal under review.
+#' @references  * Cruz-Cano, Cohen, and Mead-Morse. Canonical Correlation Analysis of
+#'  Survey data: The SurveyCC R package. The R Journal under review; 2024.
 #'  * Gentzke AS, Wang TW, Cornelius M, Park-Lee E, Ren C, Sawdey MD, Cullen KA,
 #'  Loretan C, Jamal A, Homa DM. Tobacco Product Use and Associated Factors among
 #'  Middle and High School Students - National Youth Tobacco Survey, United States, 2021.
@@ -179,8 +179,8 @@ surveycc <- function(
     Results[[i]] <- rbind(Results[[i]], svy_reg_results[i, ])
     rownames(Results[[i]]) <- c(
       rownames(Results[[i]])[1:4],
-      "Weighted Reg",
-      "Complex Survey Design Reg"
+      "Weighted Survey CC",
+      "Complex Survey CC"
     )
   }
 

@@ -61,7 +61,7 @@ trace (Caliński et al., 2006) and Roy's largest root (Johnstone, 2009). The uni
 and variables graphs (Gittins, 1986) can also be drawn by \code{surveycc} further
 complementing the information listed by the existing \code{cancor}.
 
-Moreover, \code{csdcanon} implements an algorithm (Cruz-Cano and Mead-Morse, 2023) that
+Moreover, \code{csdcanon} implements an algorithm (Cruz-Cano, Cohen, and Mead-Morse, 2024) that
 allows the inclusion of complex survey design elements, e.g. strata, cluster and
 replicate weights, in the estimation of the statistical significance of the canonical
 correlations. The core idea of the algorithm is to reduce the problem of finding
@@ -111,8 +111,8 @@ surveycc(design_object = design_object, var.x = var.x,
 }
 \references{
 \itemize{
-\item Cruz-Cano and Mead-Morse. Canonical Correlation Analysis for
-Complex Survey data: The svycanon command.  2023 The Stata Journal under review.
+\item Cruz-Cano, Cohen, and Mead-Morse. Canonical Correlation Analysis of
+Survey data: The SurveyCC R package. The R Journal under review; 2024.
 \item Gentzke AS, Wang TW, Cornelius M, Park-Lee E, Ren C, Sawdey MD, Cullen KA,
 Loretan C, Jamal A, Homa DM. Tobacco Product Use and Associated Factors among
 Middle and High School Students - National Youth Tobacco Survey, United States, 2021.
