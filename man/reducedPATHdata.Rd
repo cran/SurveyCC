@@ -5,24 +5,22 @@
 \alias{reducedPATHdata}
 \title{Reduced PATH tobacco use data set}
 \format{
-\subsection{\code{reducedPATHdata}}{
-
+## `reducedPATHdata`
 A data frame with 132 rows and 107 columns:
 \describe{
-\item{PERSONID}{Participant ID}
-\item{R01_AC1002}{Ever smoked a cigarette}
-...
-}
+  \item{PERSONID}{Participant ID}
+  \item{R01_AC1002}{Ever smoked a cigarette}
+  ...
 }
 }
 \source{
-\url{https://www.icpsr.umich.edu/web/NAHDAP/studies/36498}
+<https://www.icpsr.umich.edu/web/NAHDAP/studies/36498>
 }
 \usage{
 reducedPATHdata
 }
 \description{
 A subset of data from the Population Assessment of
-Tobacco and Health (PATH) Study
+ Tobacco and Health (PATH) Study
 }
 \keyword{datasets}

@@ -1,6 +1,6 @@
 Package: SurveyCC
 Title: Canonical Correlation for Survey Data
-Version: 0.1.1
+Version: 0.2.1
 Authors@R: 
     person("Raul", "Cruz-Cano",, "raulcruz@iu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7715-1198"))
@@ -18,8 +18,10 @@ Depends: R (>= 2.10)
 LazyData: true
 Imports: candisc, graphics, stats, survey
 NeedsCompilation: no
-Packaged: 2024-01-08 19:56:19 UTC; aaroncohen
+Packaged: 2024-07-05 17:41:45 UTC; aaroncohen
 Author: Raul Cruz-Cano [aut, cre] (<https://orcid.org/0000-0001-7715-1198>)
 Maintainer: Raul Cruz-Cano <raulcruz@iu.edu>
 Repository: CRAN
-Date/Publication: 2024-01-09 08:20:29 UTC
+Date/Publication: 2024-07-05 20:40:02 UTC
+URL: https://github.com/237triangle/SurveyCC
+BugReports: https://github.com/237triangle/SurveyCC/issues

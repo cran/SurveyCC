@@ -53,27 +53,7 @@ create_survey_objects <- function(n_cc, OGStataUVW, design_object) {
 #' @return a matrix with the following columns: stats, df1, df2, fstat, pval
 #' @noRd
 weighted_reg <- function(n_cc, OGStataUVW, design_object) {
-  #names_OGStataUVW <- names(OGStataUVW)
-
-
-  #The below is from Nico, commented out bc we're passing in a design object...
-  #`command` used to be an input term, no longer used, see original code
-  # # defining design object
-  # weightindex <- (2 * n_cc) + 1
-  # if (command != "classic") {
-  #     design_object <- svydesign(
-  #         ids = ~1,
-  #         weights = ~ OGStataUVW[, weightindex],
-  #         data = OGStataUVW
-  #     )
-  # } else {
-  #     design_object <- svydesign(
-  #         ids = ~1,
-  #         weights = ~1,
-  #         data = OGStataUVW
-  #     )
-  # }
-
+  
   # creating survey objects
   svyregs <- create_survey_objects(
     n_cc, OGStataUVW,

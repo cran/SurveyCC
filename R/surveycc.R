@@ -26,13 +26,11 @@
 #' @param howmany positive integer; allows the user to choose the number of canonical correlations
 #'  for which the statistical significance statistics are displayed. Default is to choose
 #'  the minimum of `length(var.x)` and `length(var.y)`. Cannot exceed this value.
-#' @param dim1,dim2 determines which canonical variates serve as the horizontal
-#'  and vertical axes in the optional plot. NOTE: if dim1 and dim2 not provided,
-#'  no graph will be displayed.
 #' @param selection allows the user to choose whether the type of sample size is equal to
-#'  the number of rows in the data set or the sum of the survey weights.
+#'  the number of rows (`ROWS`) in the data set or the sum of the survey weights (`FREQ`).
 #'
-#' @return A list, containing the canonical correlation object, as well as tables
+#' @return An object with S3 class "surveycc". A list, containing the canonical 
+#'  correlation object, dimensions for plotting, as well as tables
 #'  of the various tests of significance. This includes the test statistics,
 #'  degrees of freedom, and p-values for:
 #'  * Wilk's lambda
@@ -84,10 +82,8 @@
 #' var.x <- c("R01_AC1022", "R01_AE1022", "R01_AG1022CG")
 #' var.y <- c("R01_AX0075", "R01_AX0076")
 #' howmany <- 2
-#' dim1 <- 1
-#' dim2 <- 2
 #' surveycc(design_object, var.x, var.y, howmany = howmany,
-#'   dim1 = dim1, dim2 = dim2, selection = "x")
+#'   selection = "ROWS")
 #'
 #' # NYTS example
 #' design_object <-
@@ -103,11 +99,11 @@
 #' var.y <- c("qn128", "qn129", "qn130", "qn131", "qn132", "qn134")
 #' howmany <- 3
 #' surveycc(design_object = design_object, var.x = var.x,
-#'   var.y = var.y, howmany = howmany, selection = "x")
+#'   var.y = var.y, howmany = howmany, selection = "ROWS")
 #'
 surveycc <- function(
-    design_object, var.x, var.y, howmany = NA, dim1 = NA, dim2 = NA,
-    selection = "FREQ") {
+    design_object, var.x, var.y, howmany = NA,
+    selection = c("FREQ", "ROWS") ) {
   # modify the design object to have complete cases on var.x and var.y
   design_object <- subset(
     design_object,
@@ -115,7 +111,22 @@ surveycc <- function(
       design_object$variables[, c(var.x, var.y)]
     )
   )
-  # This is an attempt to extract weights for the cancor object
+  
+  # input checks etc
+  selection = match.arg(selection)
+  
+  if (is.na(howmany)) {
+    howmany <- min(length(var.x), length(var.y))
+  }
+  
+  stopifnot(
+    "`howmany` must be a positive whole number" = 
+      (howmany%%1 == 0 && howmany > 0),
+    "`howmany` must be at most the minimum of length var.x and length var.y" = 
+      (howmany <= min(length(var.x), length(var.y)))
+  )
+  
+  # Extract weights for the cancor object
   if (!is.null(design_object$pweights)) {
     myweights <- design_object$pweights
   } else myweights <- weights(design_object)
@@ -131,12 +142,6 @@ surveycc <- function(
     weights = myweights
   )
 
-  # draw plot
-  # NOTE AARON 2023-08-09 only plot if dim1 and dim2 provided
-  if (!is.na(dim1) & !is.na(dim2)) {
-    plot_canon(cc_object, dim1, dim2)
-  }
-
   # preparing the inputs for the calcpval function
   varcount1 <- length(cc_object$names$X)
   varcount2 <- length(cc_object$names$Y)
@@ -151,11 +156,7 @@ surveycc <- function(
     myrawcoef_var2 <- cc_object$coef$X
     myrawcoef_var1 <- cc_object$coef$Y
   }
-  # if (command != "classic") { # no longer necessary, DELETE
-  #   diag_W <- diag(cc_object$weights)
-  # } else {
-  #   diag_W <- diag(nrow = nrow(OgX))
-  # }
+  
   diag_W <- diag(cc_object$weights)
   n_cc <- cc_object$ndim
   weights <- cc_object$weights
@@ -184,35 +185,24 @@ surveycc <- function(
     )
   }
 
-  if (is.na(howmany)) {
-    howmany <- n_cc
-  }
+  # if (is.na(howmany)) {
+  #   howmany <- n_cc
+  # }
 
   names(Results) <- paste(
     "Stats.cancor.", 1:n_cc,
     sep = ""
   )
 
-  # NOTE 2023-08-20 round digits for tables
+  # round digits for tables
   Results <- lapply(Results, round, digits = 5)
-
-  # printing the results
-  # for (i in 1:howmany) {
-  #   aux <- Results[[i]][[1]]
-  #   mag <- round(aux[1], 0.0001)
-  #   ResultsAux <- Results[[i]]
-  #   print(ResultsAux,
-  #         title = paste0("Statistics for Canonical Correlation: ", i),
-  #         twidth = 30, format = "%10.4f",
-  #         rowtitle = paste0("Canonical Correlation=", mag),
-  #         border = c("top", "bottom")
-  #   )
-  # }
 
   out.results <- list(
     Stats.cancor = Results[1:howmany],
     cc_object = cc_object
   )
+  
+  class(out.results) <- c("surveycc", class(out.results))
 
   return(out.results)
 }

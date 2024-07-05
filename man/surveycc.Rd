@@ -9,14 +9,12 @@ surveycc(
   var.x,
   var.y,
   howmany = NA,
-  dim1 = NA,
-  dim2 = NA,
-  selection = "FREQ"
+  selection = c("FREQ", "ROWS")
 )
 }
 \arguments{
-\item{design_object}{a survey design object generated from package \code{survey},
-eg \link[survey:svydesign]{survey::svydesign}}
+\item{design_object}{a survey design object generated from package `survey`,
+eg [survey::svydesign]}
 
 \item{var.x}{the first set of variables; a vector of names}
 
@@ -24,53 +22,48 @@ eg \link[survey:svydesign]{survey::svydesign}}
 
 \item{howmany}{positive integer; allows the user to choose the number of canonical correlations
 for which the statistical significance statistics are displayed. Default is to choose
-the minimum of \code{length(var.x)} and \code{length(var.y)}. Cannot exceed this value.}
-
-\item{dim1, dim2}{determines which canonical variates serve as the horizontal
-and vertical axes in the optional plot. NOTE: if dim1 and dim2 not provided,
-no graph will be displayed.}
+the minimum of `length(var.x)` and `length(var.y)`. Cannot exceed this value.}
 
 \item{selection}{allows the user to choose whether the type of sample size is equal to
-the number of rows in the data set or the sum of the survey weights.}
+the number of rows (`ROWS`) in the data set or the sum of the survey weights (`FREQ`).}
 }
 \value{
-A list, containing the canonical correlation object, as well as tables
-of the various tests of significance. This includes the test statistics,
-degrees of freedom, and p-values for:
-\itemize{
-\item Wilk's lambda
-\item Pillai's trace
-\item Hotelling-Lawley
-\item Roy's greatest root
-\item the Cruz-Cano algorithm using the survey design object
-}
+An object with S3 class "surveycc". A list, containing the canonical 
+ correlation object, dimensions for plotting, as well as tables
+ of the various tests of significance. This includes the test statistics,
+ degrees of freedom, and p-values for:
+ * Wilk's lambda
+ * Pillai's trace
+ * Hotelling-Lawley
+ * Roy's greatest root
+ * the Cruz-Cano algorithm using the survey design object
 
-NOTE: For more information on the statistics presented, i.e. test statistic, df1,
-df2, Chi-Sq/F and p-val, please see the documentation in \link[candisc:cancor]{candisc::cancor}
-for Wilk's Lambda, Pillai's Trace and Hotelling-Lawley Trace
-(although the present package uses a Chi-squared approximation to the F-distribution),
-and see the documentation in \link[survey:svyglm]{survey::svyglm} for the Weighted/Complex Survey Design
-regression.
+ NOTE: For more information on the statistics presented, i.e. test statistic, df1,
+ df2, Chi-Sq/F and p-val, please see the documentation in [candisc::cancor]
+ for Wilk's Lambda, Pillai's Trace and Hotelling-Lawley Trace
+ (although the present package uses a Chi-squared approximation to the F-distribution),
+ and see the documentation in [survey::svyglm] for the Weighted/Complex Survey Design
+ regression.
 }
 \description{
-This command extends the functionality of \link[candisc:cancor]{candisc::cancor} by
-calculating the test statistics, degrees of freedom and p-values necessary
-to estimate and interpret the statistical significance of the secondary canonical
-corr according to the methods Wilks' lambda, Pillai's trace, and Hotelling-Lawley
-trace (Caliński et al., 2006) and Roy's largest root (Johnstone, 2009). The units
-and variables graphs (Gittins, 1986) can also be drawn by \code{surveycc} further
-complementing the information listed by the existing \code{cancor}.
+This command extends the functionality of [candisc::cancor] by
+ calculating the test statistics, degrees of freedom and p-values necessary
+ to estimate and interpret the statistical significance of the secondary canonical
+ corr according to the methods Wilks' lambda, Pillai's trace, and Hotelling-Lawley
+ trace (Caliński et al., 2006) and Roy's largest root (Johnstone, 2009). The units
+ and variables graphs (Gittins, 1986) can also be drawn by `surveycc` further
+ complementing the information listed by the existing `cancor`.
 
-Moreover, \code{csdcanon} implements an algorithm (Cruz-Cano, Cohen, and Mead-Morse, 2024) that
-allows the inclusion of complex survey design elements, e.g. strata, cluster and
-replicate weights, in the estimation of the statistical significance of the canonical
-correlations. The core idea of the algorithm is to reduce the problem of finding
-the correlations among the canonical variates and their corresponding statistical
-significance to calculating an equivalent sequence of univariate linear regression.
-This switch allows the user to take advantage of the existing theoretical and
-computational resources that integrate the complex survey design elements into
-these regression models (Valliant and Dever, 2018). Hence, this algorithm can include
-the same complex design elements as in \code{survey}.
+ Moreover, `csdcanon` implements an algorithm (Cruz-Cano, Cohen, and Mead-Morse, 2024) that
+ allows the inclusion of complex survey design elements, e.g. strata, cluster and
+ replicate weights, in the estimation of the statistical significance of the canonical
+ correlations. The core idea of the algorithm is to reduce the problem of finding
+ the correlations among the canonical variates and their corresponding statistical
+ significance to calculating an equivalent sequence of univariate linear regression.
+ This switch allows the user to take advantage of the existing theoretical and
+ computational resources that integrate the complex survey design elements into
+ these regression models (Valliant and Dever, 2018). Hence, this algorithm can include
+ the same complex design elements as in `survey`.
 }
 \examples{
 # PATH example
@@ -87,10 +80,8 @@ design_object <-
 var.x <- c("R01_AC1022", "R01_AE1022", "R01_AG1022CG")
 var.y <- c("R01_AX0075", "R01_AX0076")
 howmany <- 2
-dim1 <- 1
-dim2 <- 2
 surveycc(design_object, var.x, var.y, howmany = howmany,
-  dim1 = dim1, dim2 = dim2, selection = "x")
+  selection = "ROWS")
 
 # NYTS example
 design_object <-
@@ -106,28 +97,26 @@ var.x <- c("qn9", "qn38", "qn40", "qn53", "qn54", "qn64", "qn69", "qn74",
 var.y <- c("qn128", "qn129", "qn130", "qn131", "qn132", "qn134")
 howmany <- 3
 surveycc(design_object = design_object, var.x = var.x,
-  var.y = var.y, howmany = howmany, selection = "x")
+  var.y = var.y, howmany = howmany, selection = "ROWS")
 
 }
 \references{
-\itemize{
-\item Cruz-Cano, Cohen, and Mead-Morse. Canonical Correlation Analysis of
-Survey data: The SurveyCC R package. The R Journal under review; 2024.
-\item Gentzke AS, Wang TW, Cornelius M, Park-Lee E, Ren C, Sawdey MD, Cullen KA,
-Loretan C, Jamal A, Homa DM. Tobacco Product Use and Associated Factors among
-Middle and High School Students - National Youth Tobacco Survey, United States, 2021.
-rveill Summ. 2022;71(5):1-29. doi: 10.15585/mmwr.ss7105a1. PubMed PMID: 35271557.
-\item Gittins R.  Canonical Analysis: A Review with Applications in Ecology:
-Springer Berlin Heidelberg; 1986.
-\item Caliński T., Krzyśko M. and WOłyński W. (2006) A Comparison of Some Tests
-for Determining the Number of Nonzero Canonical Correlations, Communications
-in Statistics -Simulation and Computation, 35:3, 727-749, DOI: 10.1080/03610 6290.
-\item Hyland A, Ambrose BK, Conway KP, et al. Design and methods of the Population
-Assessment of Tobacco and Health (PATH) StudyTobacco Control 2017;26:371-378.
-\item Johnstone IM. Approximate Null Distribution of the largest root in a
-Multivariate Analysis.  Ann Appl Stat. 2009;3(4):1616-1633. doi: 10.1214/08-AOAS220.
-PMID: 20526465; PMCID: PMC2880335.
-\item Valliant R. and Dever JA.  Survey Weights: A Step-by-Step Guide to Calculation:
-Stata Press; 2018. ISBN-13: 978-1-59718-260-7.
-}
+* Cruz-Cano, Cohen, and Mead-Morse. Canonical Correlation Analysis of
+ Survey data: The SurveyCC R package. The R Journal under review; 2024.
+ * Gentzke AS, Wang TW, Cornelius M, Park-Lee E, Ren C, Sawdey MD, Cullen KA,
+ Loretan C, Jamal A, Homa DM. Tobacco Product Use and Associated Factors among
+ Middle and High School Students - National Youth Tobacco Survey, United States, 2021.
+ rveill Summ. 2022;71(5):1-29. doi: 10.15585/mmwr.ss7105a1. PubMed PMID: 35271557.
+ * Gittins R.  Canonical Analysis: A Review with Applications in Ecology:
+ Springer Berlin Heidelberg; 1986.
+ * Caliński T., Krzyśko M. and WOłyński W. (2006) A Comparison of Some Tests
+ for Determining the Number of Nonzero Canonical Correlations, Communications
+ in Statistics -Simulation and Computation, 35:3, 727-749, DOI: 10.1080/03610 6290.
+ * Hyland A, Ambrose BK, Conway KP, et al. Design and methods of the Population
+ Assessment of Tobacco and Health (PATH) StudyTobacco Control 2017;26:371-378.
+ * Johnstone IM. Approximate Null Distribution of the largest root in a
+ Multivariate Analysis.  Ann Appl Stat. 2009;3(4):1616-1633. doi: 10.1214/08-AOAS220.
+ PMID: 20526465; PMCID: PMC2880335.
+ *  Valliant R. and Dever JA.  Survey Weights: A Step-by-Step Guide to Calculation:
+ Stata Press; 2018. ISBN-13: 978-1-59718-260-7.
 }

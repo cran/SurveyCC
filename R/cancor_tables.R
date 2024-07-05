@@ -135,7 +135,7 @@ table_hotelling <- function(weighted_rho, p, q, samplesize, Lawley) {
 #' calculate p-values for the canonical correlations
 #'
 #' @param cc_object output from the candisc function
-#' @param selection "FREQ" or "PROB"
+#' @param selection "FREQ" or "ROWS"
 #' @param OgX original X matrix
 #' @param OgY original Y matrix
 #' @param diag_W diagonal matrix of weights
@@ -200,7 +200,7 @@ calcpval <- function(
 
   # putting it all together
   Results <- vector("list", length(weighted_rho))
-  for (i in 1:length(weighted_rho)) {
+  for (i in seq_along(weighted_rho)) {
     myResults <- matrix(nrow = 0, ncol = 5)
     #myResults <- rbind(myResults, rep(weighted_rho[i]^2, 5)) #AARON 2023-08-17 comment out
     myResults <- rbind(myResults, wilks[i, ])
